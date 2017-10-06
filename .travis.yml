@@ -1,0 +1,7 @@
+script:
+  - git clone git@github.com:raboof/testwiki source
+  - git clone -b gh-pages git@github.com:raboof/testwiki target
+  - export SOURCE=source
+  - export TARGET=target
+  - ./generate.sh
+  - cd target; git diff
