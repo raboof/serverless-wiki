@@ -2,6 +2,7 @@ script:
   - git clone https://github.com/raboof/testwiki source
   - git clone -b gh-pages https://github.com/raboof/testwiki target
   - export SOURCE=source
+  - ls -alFh $SOURCE
   - export TARGET=target
   - ./generate.sh
   - cd target; git diff
