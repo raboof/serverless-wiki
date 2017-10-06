@@ -4,5 +4,6 @@ script:
   - export SOURCE=source
   - ls -alFh $SOURCE
   - export TARGET=target
+  - pwd
   - ./generate.sh
   - cd target; git diff

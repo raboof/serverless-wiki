@@ -12,6 +12,7 @@ export CODE="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 cd $TARGET
 cp -r $CODE/resources .
+pwd
 cp -r $SOURCE/users .
 
 # And convert $SOURCE/pages/*.md to $TARGET/*.html :)
