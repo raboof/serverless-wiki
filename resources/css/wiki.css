@@ -1,0 +1,19 @@
+body {
+  font-family: sans-serif;
+}
+.header {
+  color: #fff;
+  text-align: center;
+  background-color: #168855;
+  padding: 30px;
+  font-size: 2em;
+}
+#login {
+  position: absolute;
+}
+a {
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}

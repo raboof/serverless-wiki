@@ -1,10 +1,13 @@
 <html>
 <head>
+  <link rel="stylesheet" type="text/css" href="css/wiki.css">
   <script type="text/javascript" src="js/hocon.min.js"></script>
 </head>
 <body onload="load()">
-Hello, world.
-<p>
+<section class="header">
+serverless-wiki
+</section>
+<section style="text-align: right; padding: 20px">
 <a id="loginlink" href="#" onclick="document.getElementById('login').style.display = 'block'">Log in</a>
 <div id="loggedin"></div>
 <form id="login" onsubmit="login()" style="display: none">
@@ -12,6 +15,7 @@ Hello, world.
   Password: <input id="password" type="password"><br>
   <input type="submit"/>
 </form>
+</section>
 <script>
 function load() {
   const userStr = localStorage.getItem("user")
