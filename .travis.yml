@@ -1,6 +1,9 @@
 script:
-  - git clone https://github.com/raboof/testwiki source
-  - git clone -b gh-pages https://github.com/raboof/testwiki target
+  - openssl aes-256-cbc -K $encrypted_745b33c0c930_key -iv $encrypted_745b33c0c930_iv -in id_rsa.enc -out id_rsa -d
+  - chmod 0600 id_rsa
+  - export GIT_SSH_COMMAND='ssh -i id_rsa'
+  - git clone git@github.com:raboof/testwiki source
+  - git clone -b gh-pages git@github.com:raboof/testwiki target
   - export SOURCE=source
   - export TARGET=target
   - ./generate.sh
