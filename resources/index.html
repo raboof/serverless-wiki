@@ -2,15 +2,27 @@
 <head>
   <script type="text/javascript" src="js/hocon.min.js"></script>
 </head>
-<body>
+<body onload="load()">
 Hello, world.
 <p>
-<form>
+<a id="loginlink" href="#" onclick="document.getElementById('login').style.display = 'block'">Log in</a>
+<div id="loggedin"></div>
+<form id="login" onsubmit="login()" style="display: none">
   Username: <input id="username" type="text"><br>
   Password: <input id="password" type="password"><br>
-  <a href="#" onclick="login()">Log in.</a>
+  <input type="submit"/>
 </form>
 <script>
+function load() {
+  const userStr = localStorage.getItem("user")
+  if (userStr) {
+    user = JSON.parse(userStr);
+    document.getElementById('loginlink').style.display = 'none';
+    document.getElementById('login').style.display = 'none';
+    document.getElementById('loggedin').style.display = 'block';
+    document.getElementById('loggedin').innerHTML = user.full_name;
+  }
+}
 function lightHash(password) {
   let result = 0;
   for (c in password) {
@@ -40,7 +52,8 @@ function login() {
     function(hoconConfig) {
       const config = parseHocon(hoconConfig);
       if (lightHash(password) == config.password_light_hash) {
-        alert("Welcome, " + username);
+        localStorage.setItem("user", JSON.stringify(config));
+        load();
       } else {
         alert("Wrong password");
       }
