@@ -9,7 +9,8 @@ serverless-wiki
 </section>
 <section style="text-align: right; padding: 20px">
 <a id="loginlink" href="#" onclick="document.getElementById('login').style.display = 'block'">Log in</a>
-<div id="loggedin"></div>
+<span id="loggedin"></span>
+<a id="logoutlink" href="#" onclick="logout()" style="display: none">Log out</a>
 <form id="login" onsubmit="login()" style="display: none">
   Username: <input id="username" type="text"><br>
   Password: <input id="password" type="password"><br>
@@ -22,10 +23,15 @@ function load() {
   if (userStr) {
     user = JSON.parse(userStr);
     document.getElementById('loginlink').style.display = 'none';
-    document.getElementById('login').style.display = 'none';
-    document.getElementById('loggedin').style.display = 'block';
+    document.getElementById('logoutlink').style.display = 'inline';
+    document.getElementById('loggedin').style.display = 'inline';
     document.getElementById('loggedin').innerHTML = user.full_name;
+  } else {
+    document.getElementById('loginlink').style.display = 'inline';
+    document.getElementById('logoutlink').style.display = 'none';
+    document.getElementById('loggedin').style.display = 'none';
   }
+  document.getElementById('login').style.display = 'none';
 }
 function lightHash(password) {
   let result = 0;
@@ -47,6 +53,11 @@ function get(url, cb, err_cb) {
   }
   r.open("GET", url);
   r.send();
+}
+
+function logout() {
+  localStorage.setItem("user", "");
+  load();
 }
 
 function login() {
