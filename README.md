@@ -20,3 +20,14 @@ In a nutshell:
 the password is put though a non-cryptographic, high-collision hash function.
 
 The 'real' authentication happens when POSTing new markdown.
+
+## HTML generation
+
+The actual HTML generation takes wiki templates and markdown sources
+as input, and generates HTML output.
+
+We expect a low throughput (after all we hope to be mostly serverless,
+so also keep Lambda invocations to a minimum), so we'd like a platform
+that has fast cold start times. While the JDK can be a fine choice for
+high-throughput Lambda functions, it might not be great for us. Nodejs
+and python are comparable, and given that choice I prefer python.
