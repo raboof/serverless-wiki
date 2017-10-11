@@ -14,8 +14,8 @@ cp -r $CODE/resources/* $TARGET
 cp -r $SOURCE/users $TARGET
 
 # And convert $SOURCE/pages/*.md to $TARGET/*.html :)
-cd $CODE
 for file in `cd $SOURCE; find . -name "*.md"`; do
   mkdir -p $TARGET/`dirname $file`
-  ./convert_page.py < $SOURCE/$file > $TARGET/${file%md}html
+  echo "Processing $SOURCE/$file into $TARGET/${file%md}html"
+  $CODE/convert_page.py < $SOURCE/$file > $TARGET/${file%md}html
 done
