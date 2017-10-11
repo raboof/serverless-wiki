@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 
+import sys
 import fileinput
 import markdown2
 
-with open ("templates/index.html", "r") as template:
+with open (sys.path[0] + "/templates/index.html", "r") as template:
   line = template.readline()
   while line:
     if (line == '<!-- PAGE_CONTENT_HERE -->\n'):
