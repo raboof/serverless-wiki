@@ -1,0 +1,6 @@
+*.pyc
+terraform.tfstate
+terraform.tfstate.backup
+source
+target
+*_creds.sh
