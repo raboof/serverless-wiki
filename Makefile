@@ -7,12 +7,12 @@ deploy: deploy_aws
 deploy_aws: serverless-wiki-lambda.zip
 	terraform apply
 
-lambda_sources = markdown2.py deploy.py edit.py
+lambda_sources = markdown2.py deploy.py edit.py $(shell find templates -type f) $(shell find resources -type f)
 
 serverless-wiki-lambda.zip: $(lambda_sources)
 	# boto3 comes preinstalled, so no need to fetch it
 	# pip install boto3 -t lambda
-	zip serverless-wiki-lambda.zip $(lambda_sources)
+	zip -r serverless-wiki-lambda.zip $(lambda_sources)
 
 clean:
 	rm -r serverless-wiki-lambda.zip
