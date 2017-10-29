@@ -52,7 +52,7 @@ resource "aws_api_gateway_integration" "integration" {
   resource_id = "${aws_api_gateway_resource.serverless-edit.id}"
   http_method = "${aws_api_gateway_method.submit.http_method}"
   integration_http_method = "POST"
-  type = "AWS"
+  type = "AWS_PROXY"
   uri = "arn:aws:apigateway:${var.aws_region}:lambda:path/2015-03-31/functions/${aws_lambda_function.serverless-edit.arn}/invocations"
 }
 
