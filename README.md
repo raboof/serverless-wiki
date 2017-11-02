@@ -25,6 +25,16 @@ the password is put though a non-cryptographic, high-collision hash function.
 
 The 'real' authentication happens when POSTing new markdown.
 
+Design space:
+
+ * We want to have a public user database (in git)
+ * We don't want an attacker to be able to do an offline dictionary attach on the password, so we use a nonce only known to the lambda
+ * We don't want to have access to the plaintext password, not even in the lambda, so we also hash (using a public seed) in the browser.
+
+To be fair an attacker could still first brute-force the private nonce and
+then do a dictionary attack after all, but especially for a public wiki this
+seems sufficient.
+
 ## HTML generation
 
 The actual HTML generation takes wiki templates and markdown sources
