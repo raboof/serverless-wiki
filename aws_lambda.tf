@@ -1,4 +1,6 @@
 variable "aws_account_id" { }
+variable "source_git_url" { }
+variable "nonce" { }
 
 resource "aws_iam_role" "iam_for_lambda" {
   name = "iam_for_lambda"
@@ -27,6 +29,14 @@ resource "aws_lambda_function" "serverless-edit" {
   handler = "edit.hello"
   source_code_hash = "${base64sha256(file("serverless-wiki-lambda.zip"))}"
   runtime = "python2.7"
+  timeout = 15
+
+  environment {
+    variables = {
+      SOURCE_GIT_URL = "${var.source_git_url}"
+      NONCE = "${var.nonce}"
+    }
+  }
 }
 
 resource "aws_api_gateway_rest_api" "serverless-wiki-api" {
