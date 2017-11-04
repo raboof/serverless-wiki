@@ -1,6 +1,9 @@
 *.pyc
+lambda
 terraform.tfstate
 terraform.tfstate.backup
+.terraform
 source
 target
 *_creds.sh
+serverless-wiki-lambda.zip
