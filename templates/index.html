@@ -1,7 +1,9 @@
 <html>
 <head>
   <link rel="stylesheet" type="text/css" href="css/wiki.css">
+  <link rel="stylesheet" type="text/css" href="css/simplemde.min.css">
   <script type="text/javascript" src="js/hocon.min.js"></script>
+  <script type="text/javascript" src="js/simplemde.min.js"></script>
 </head>
 <body onload="load()">
 <section class="header">
@@ -80,5 +82,11 @@ function login() {
 }
 </script>
 <!-- PAGE_CONTENT_HERE -->
+<textarea>
+<!-- PAGE_SOURCE_HERE -->
+</textarea>
+<script>
+var simplemde = new SimpleMDE();
+</script>
 </body>
 </html>

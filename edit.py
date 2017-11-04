@@ -11,6 +11,8 @@ from subprocess import call
 from dulwich import client as _mod_client
 from dulwich.contrib.paramiko_vendor import ParamikoSSHVendor
 
+import templating
+
 class MyParamikoSSHVendor(ParamikoSSHVendor):
   def __init__(self):
     self.ssh_kwargs = { 'key_filename': sys.path[0] + '/id_rsa' }
@@ -34,20 +36,6 @@ bucket = s3.Bucket('serverless-wiki')
 
 def update_storage(page, html):
   bucket.put_object(Key=page + '.html', Body=html, ContentType='text/html')
-
-def apply_template(md):
-  with open (sys.path[0] + "/templates/index.html", "r") as template:
-    result = ''
-    line = template.readline()
-    while line:
-      if (line == '<!-- PAGE_CONTENT_HERE -->\n'):
-        # TODO further processing, e.g. handling in-wiki links
-        # both to existing and non-existing pages.
-        result += markdown2.markdown(md)
-      else:
-        result += (line.replace('\n', ''))
-      line = template.readline()
-  return result
 
 def update_git(page, new_md, username, user):
   filename = "/tmp/source/%s.md" % page
@@ -88,7 +76,7 @@ def hello(post, context):
   if not bcrypt.checkpw((os.environ['NONCE'] + auth).encode('utf-8'), user.get_string('password_hash').encode('utf-8')):
     return error('401', 'Invalid password')
 
-  new_html = apply_template(post['body'])
+  new_html = templating.apply_template(post['body'])
 
   update_git(page, post['body'], username, user)
   update_storage(page, new_html)
