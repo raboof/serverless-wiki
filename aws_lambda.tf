@@ -2,6 +2,27 @@ variable "aws_account_id" { }
 variable "source_git_url" { }
 variable "nonce" { }
 
+resource "aws_iam_policy" "s3_write_access" {
+  name = "s3_write_access"
+  path = "/"
+  description = "IAM policy for s3 write access"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "s3:*",
+      "Resource": [
+        "arn:aws:s3:::serverless-wiki/*"
+      ],
+      "Effect": "Allow"
+    }
+  ]
+}
+EOF
+}
+
 resource "aws_iam_role" "iam_for_lambda" {
   name = "iam_for_lambda"
 
@@ -20,6 +41,11 @@ resource "aws_iam_role" "iam_for_lambda" {
   ]
 }
 EOF
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_writes_s3" {
+  role = "${aws_iam_role.iam_for_lambda.name}"
+  policy_arn = "${aws_iam_policy.s3_write_access.arn}"
 }
 
 resource "aws_lambda_function" "serverless-edit" {
