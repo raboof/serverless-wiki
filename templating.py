@@ -13,6 +13,6 @@ def apply_template(md):
       elif (line == '<!-- PAGE_SOURCE_HERE -->\n'):
         result += md
       else:
-        result += (line.replace('\n', ''))
+        result += line
       line = template.readline()
   return result
