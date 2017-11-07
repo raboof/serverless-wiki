@@ -15,7 +15,7 @@ top = os.environ['TARGET']
 types = {
   '.html': "text/html",
   '.css': "text/css",
-  '.js': "application/javascript",
+  '.js': "application/javascript; charset=UTF-8",
   '.hocon': "application/hocon",
 }
 
