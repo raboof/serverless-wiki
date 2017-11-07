@@ -9,4 +9,4 @@ markdown = ''
 for line in fileinput.input():
   markdown += line
 
-print(templating.apply_template(markdown))
+print(templating.apply_template(markdown, os.environ['POST_URL']))

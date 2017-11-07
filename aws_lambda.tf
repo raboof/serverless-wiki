@@ -17,6 +17,15 @@ resource "aws_iam_policy" "s3_write_access" {
         "arn:aws:s3:::serverless-wiki/*"
       ],
       "Effect": "Allow"
+    },
+    {
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Resource": "arn:aws:logs:*:*:*",
+      "Effect": "Allow"
     }
   ]
 }
@@ -55,7 +64,7 @@ resource "aws_lambda_function" "serverless-edit" {
   handler = "edit.hello"
   source_code_hash = "${base64sha256(file("serverless-wiki-lambda.zip"))}"
   runtime = "python2.7"
-  timeout = 15
+  timeout = 20
 
   environment {
     variables = {

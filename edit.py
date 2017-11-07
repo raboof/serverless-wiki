@@ -24,18 +24,26 @@ from pyhocon import ConfigFactory
 
 def fetch_source():
   if os.path.isdir('/tmp/source/.git'):
+    print('pulling')
     porcelain.pull('/tmp/source', os.environ['SOURCE_GIT_URL'], 'refs/heads/master')
   else:
+    print('cloning')
     porcelain.clone(os.environ['SOURCE_GIT_URL'], '/tmp/source')
+  print('updated')
 
 def get_user(username):
-  return ConfigFactory.parse_file('/tmp/source/users/%s.hocon' % username)
+  try:
+    return ConfigFactory.parse_file('/tmp/source/users/%s.hocon' % username)
+  except IOError:
+    return None
 
 s3 = boto3.resource('s3')
 bucket = s3.Bucket('serverless-wiki')
 
 def update_storage(page, html):
+  print('putting object')
   bucket.put_object(Key=page + '.html', Body=html, ContentType='text/html')
+  print('put object')
 
 def update_git(page, new_md, username, user):
   filename = "/tmp/source/%s.md" % page
@@ -46,13 +54,19 @@ def update_git(page, new_md, username, user):
 
   author = user.get_string('full_name') + ' <' + username + '@invalid>'
   committer = 'lambda <lambda@bzzt.net>'
+  print('committing')
   porcelain.commit('/tmp/source', "Page '%s' updated" % page, author=author, committer=committer)
+  print('pushing')
   porcelain.push('/tmp/source', os.environ['SOURCE_GIT_URL'], 'refs/heads/master')
+  print('pushed')
 
 def error(status, body):
   return {
     'statusCode': status,
     'body': body,
+    'headers': {
+      'Access-Control-Allow-Origin': '*',
+    }
   }
 
 name_pattern = re.compile("^[a-zA-Z0-9_]+$")
@@ -73,10 +87,16 @@ def hello(post, context):
   fetch_source()
   user = get_user(username)
 
+  if not user:
+    return error('401', 'Unknown user')
+
+  print('checking bcrypt hash')
   if not bcrypt.checkpw((os.environ['NONCE'] + auth).encode('utf-8'), user.get_string('password_hash').encode('utf-8')):
     return error('401', 'Invalid password')
 
-  new_html = templating.apply_template(post['body'])
+  print('applying template')
+  apiId = post['requestContext']['apiId']
+  new_html = templating.apply_template(post['body'], 'https://' + apiId + '.execute-api.' + os.environ['AWS_REGION'] + '.amazonaws.com/sw_prod')
 
   update_git(page, post['body'], username, user)
   update_storage(page, new_html)
@@ -86,5 +106,6 @@ def hello(post, context):
     'body': new_html,
     'headers': {
       'Content-Type': 'text/html',
-    },
+      'Access-Control-Allow-Origin': '*',
+    }
   }

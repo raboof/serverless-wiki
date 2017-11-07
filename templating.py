@@ -1,7 +1,7 @@
 import sys
 import markdown2
 
-def apply_template(md):
+def apply_template(md, post_url):
   with open (sys.path[0] + "/templates/index.html", "r") as template:
     result = ''
     line = template.readline()
@@ -13,6 +13,6 @@ def apply_template(md):
       elif (line == '<!-- PAGE_SOURCE_HERE -->\n'):
         result += md
       else:
-        result += line
+        result += line.replace('<!-- POST_URL -->', post_url)
       line = template.readline()
   return result
