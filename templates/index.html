@@ -2,6 +2,7 @@
 <head>
   <link rel="stylesheet" type="text/css" href="css/wiki.css">
   <link rel="stylesheet" type="text/css" href="css/simplemde.min.css">
+  <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
   <script type="text/javascript" src="js/hocon.min.js"></script>
   <script type="text/javascript" src="js/simplemde.min.js"></script>
 </head>
@@ -11,8 +12,9 @@ serverless-wiki
 </section>
 <section style="text-align: right; padding: 20px">
 <a id="loginlink" href="#" onclick="document.getElementById('login').style.display = 'block'">Log in</a>
-<span id="loggedin"></span>
-<a id="logoutlink" href="#" onclick="logout()" style="display: none">Log out</a>
+<a href="#" onclick="edit()" class="loggedin">edit</a>
+<span id="loggedin" class="loggedin"></span>
+<a id="logoutlink" href="#" onclick="logout()" class="loggedin">Log out</a>
 <form id="login" onsubmit="login()" style="display: none">
   Username: <input id="username" type="text"><br>
   Password: <input id="password" type="password"><br>
@@ -23,70 +25,74 @@ serverless-wiki
 function load() {
   const userStr = localStorage.getItem("user")
   if (userStr) {
-    user = JSON.parse(userStr);
-    document.getElementById('loginlink').style.display = 'none';
-    document.getElementById('logoutlink').style.display = 'inline';
-    document.getElementById('loggedin').style.display = 'inline';
-    document.getElementById('loggedin').innerHTML = user.full_name;
+    user = JSON.parse(userStr)
+    $('#loginlink').hide()
+    $('#loggedin').text(user.full_name)
+    $('.loggedin').show()
   } else {
-    document.getElementById('loginlink').style.display = 'inline';
-    document.getElementById('logoutlink').style.display = 'none';
-    document.getElementById('loggedin').style.display = 'none';
+    $('#loginlink').show()
+    $('.loggedin').hide()
   }
-  document.getElementById('login').style.display = 'none';
+  $('#login').hide()
 }
 function lightHash(password) {
-  let result = 0;
+  let result = 0
   for (c in password) {
-    result = (result + password.charCodeAt(c)) % 100;
+    result = (result + password.charCodeAt(c)) % 100
   }
-  return result;
+  return result
 }
 
 function get(url, cb, err_cb) {
-  var r = new XMLHttpRequest();
+  var r = new XMLHttpRequest()
   r.onreadystatechange = function() {
     if (r.readyState == 4) {
       if (r.status == 200)
-        cb(r.responseText);
+        cb(r.responseText)
       else
-        err_cb(r.status, r.responseText);
+        err_cb(r.status, r.responseText)
     }
   }
-  r.open("GET", url);
-  r.send();
+  r.open("GET", url)
+  r.send()
 }
 
 function logout() {
-  localStorage.setItem("user", "");
-  load();
+  localStorage.setItem("user", "")
+  load()
 }
 
 function login() {
-  var username = document.getElementById('username').value;
-  var password = document.getElementById('password').value;
+  var username = document.getElementById('username').value
+  var password = document.getElementById('password').value
   get('users/' + username + '.hocon',
     function(hoconConfig) {
-      const config = parseHocon(hoconConfig);
+      const config = parseHocon(hoconConfig)
       if (lightHash(password) == config.password_light_hash) {
-        localStorage.setItem("user", JSON.stringify(config));
-        load();
+        localStorage.setItem("user", JSON.stringify(config))
+        load()
       } else {
-        alert("Wrong password");
+        alert("Wrong password")
       }
     },
     function(status, text) {
-      alert("Sorry", status, text);
+      alert("Sorry", status, text)
     }
   )
 }
+
+function edit() {
+  $('.edit').show()
+  simplemde = new SimpleMDE()
+
+  $('.noedit').hide()
+}
 </script>
+<div class="noedit">
 <!-- PAGE_CONTENT_HERE -->
-<textarea>
+</div>
+<textarea class="edit">
 <!-- PAGE_SOURCE_HERE -->
 </textarea>
-<script>
-var simplemde = new SimpleMDE();
-</script>
 </body>
 </html>

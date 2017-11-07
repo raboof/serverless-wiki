@@ -8,6 +8,12 @@ body {
   padding: 30px;
   font-size: 2em;
 }
+.edit {
+  display: none;
+}
+.loggedin {
+  display: none;
+}
 #login {
   position: absolute;
 }
@@ -16,4 +22,7 @@ a {
 }
 a:hover {
   text-decoration: underline;
+}
+.CodeMirror {
+  height: 66% !important;
 }
