@@ -109,11 +109,13 @@ function page() {
 }
 
 function save() {
+  $('.spinner').show()
   var url = "<!-- POST_URL -->/edit?user=" + user.username + "&page=" + page() + "&auth=" + user.auth
   post(url, function() {
-    alert('ok')
+    document.location.reload()
   },
   function(status, err) {
+    $('.spinner').hide()
     alert(err)
   },
   simplemde.value())
@@ -125,5 +127,7 @@ function save() {
 <textarea class="edit">
 <!-- PAGE_SOURCE_HERE -->
 </textarea>
+<div class="spinner">
+</div>
 </body>
 </html>

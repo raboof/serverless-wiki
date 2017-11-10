@@ -26,3 +26,14 @@ a:hover {
 .CodeMirror {
   height: 66% !important;
 }
+.spinner {
+  display: none;
+  position: absolute;
+  z-index: 1;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  background-color: grey;
+  opacity: 0.6;
+}
