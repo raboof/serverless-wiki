@@ -3,22 +3,26 @@ Serverless-wiki is a 'serverless' public wiki
 ![Overview diagram](./overview.svg)
 
 This means most of the functionality can be accessed while
-serving static pages from a CDN, and only for updates is any
-server-side code required.
+serving static pages, and only for updates is any custom server-side
+code required.
 
 In a nutshell:
 
-* Pages are mostly static and served from a CDN
+* Pages are mostly static
   * gh-pages is convenient, but changes are slow to propagate
-  * an s3 bucket might work
-  * a traditional webhost with scp/rsync
+  * an s3 bucket seems to work
+  * a traditional webhost with scp/rsync could also be an option
 * Page sources are stored as markdown in a git repository (e.g. github)
-* Logging in stores your password in your browser, and checks whether your
+* Logging in stores your credentials in your browser, and checks whether your
   password is 'plausible' (based on a high-collision hash)
 * Update pages with a POST with new markdown, which:
   * is 'properly' authenticated
   * commits the new markdown to the git repo
   * generates new HTML and commit it to the CDN
+
+## Demo
+
+See http://serverless-wiki.s3-website-eu-west-1.amazonaws.com/
 
 ## Authentication
 
