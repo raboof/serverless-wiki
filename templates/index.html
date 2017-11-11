@@ -105,7 +105,12 @@ function edit() {
 function page() {
   var segments = window.location.href.split('/')
   var last_segment = segments[segments.length-1]
-  return last_segment.split('.html')[0]
+  var page = last_segment.split('.html')[0].split('?')[0].split('#')[0]
+  if (page == '') {
+    return 'index'
+  } else {
+    return page
+  }
 }
 
 function save() {

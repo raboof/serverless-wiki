@@ -1,5 +1,7 @@
 Serverless-wiki is a 'serverless' public wiki
 
+![Overview diagram](./overview.svg)
+
 This means most of the functionality can be accessed while
 serving static pages from a CDN, and only for updates is any
 server-side code required.
